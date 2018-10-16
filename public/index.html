@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" media="screen" href="/css/index.css" />
+  <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700|Yanone+Kaffeesatz:300,400" rel="stylesheet">
+  <script src="index.js"></script>
+</head>
+
+<body>
+  <div class="header">
+    <img class="logo" src="images/logo.svg">
+    <h2>News Posts</h2>
+  </div>
+  <div class="filter">
+    <a href="#technology">technology</a>
+    <a href="#science">science</a>
+    <a href="#health">Health</a>
+    <a href="#entertainment">Entertainment</a>
+    <a href="#business">Business</a>
+    <a href="#general">General</a>
+  </div>
+  <div class="news-container"></div>
+  <!--init news block -->
+  <div class="blocknew">
+    <div class="blockimage">
+      <a href="${this.url}" target="_blank">
+        <img src="${this.urlToImage}"></img>
+      </a>
+    </div>
+    <div class="blockdetails">
+      <p class="blockdate">Published: ${this.publishedAt}</p>
+      <h3>${this.title}</h3>
+      <p class="blockdetail">
+        ${this.description}
+      </p>
+      <p class="blockauthor">
+       Author: ${this.author}
+      </p>
+      <a class="link-detail" href="${this.url}" target="_blank">View full article</a>
+    </div>
+  </div>
+  <!--end news block -->
+</body>
+
+</html>
