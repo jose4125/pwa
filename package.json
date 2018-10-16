@@ -1,0 +1,27 @@
+{
+  "name": "pwa",
+  "version": "1.0.0",
+  "description": "pwa app",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "husky": "^1.1.2",
+    "prettier": "1.14.3",
+    "pretty-quick": "^1.8.0"
+  },
+  "scripts": {
+    "start": "http-server -c-1",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "precommit": "pretty-quick --staged"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jose4125/pwa.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jose4125/pwa/issues"
+  },
+  "homepage": "https://github.com/jose4125/pwa#readme"
+}
