@@ -33,14 +33,34 @@ $ npm start
 
 - go to the home page
 
-  [localhost:8080][home]
+  [http://localhost:8080][home]
 
   [http://127.0.0.1:8080][home2]
 
-* go to the add manifest branch
+- go to the add manifest branch
 
-[add manifest branch][branch]
+  [add manifest branch][branch1]
 
-[home]: localhost:8080
+  - change the copy-html scritp in the package.json
+
+  ```git
+  - "copy-html": "cp app/index.html ./public/index.html",
+  + "copy-html": "cp app/{index.html,manifest.json} ./public/",
+  ```
+
+  - add the manifest `<link>` in the index.html
+
+  ```html
+  + <link rel="manifest" href="/manifest.json">
+  ```
+
+  - add the `manifest.json` file in the root of our `app/`
+
+- go to the add safari - explorer support
+
+  [safari - explorer support][branch2]
+
+[home]: http://localhost:8080
 [home2]: http://127.0.0.1:8080
-[branch]: https://github.com/jose4125/pwa/tree/1-add-manifest
+[branch1]: https://github.com/jose4125/pwa/tree/1-add-manifest
+[branch2]: https://github.com/jose4125/pwa/tree/2-safari-explorer-support
