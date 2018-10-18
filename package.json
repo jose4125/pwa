@@ -18,7 +18,7 @@
     "clean": "rm -rf ./public && mkdir public",
     "copy-images": "cp -R app/images/ ./public/images",
     "copy-css": "cp -R app/css/ ./public/css",
-    "copy-html": "cp app/index.html ./public/index.html",
+    "copy-html": "cp app/{index.html,manifest.json} ./public/",
     "copy": "npm run clean && npm run copy-html && npm run copy-css && npm run copy-images",
     "start": "http-server -c-1",
     "precommit": "pretty-quick --staged",
