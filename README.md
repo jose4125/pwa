@@ -60,7 +60,14 @@ $ npm start
 
   [safari - explorer support][branch2]
 
+  - add the `<meta>` and `<link>` tags in the `index.html` to support safari and explorer
+
+- go to register sw
+
+  [register-sw][branch3]
+
 [home]: http://localhost:8080
 [home2]: http://127.0.0.1:8080
 [branch1]: https://github.com/jose4125/pwa/tree/1-add-manifest
 [branch2]: https://github.com/jose4125/pwa/tree/2-safari-explorer-support
+[branch3]: https://github.com/jose4125/pwa/tree/3-register-sw
