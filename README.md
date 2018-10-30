@@ -66,8 +66,30 @@ $ npm start
 
   [register-sw][branch3]
 
+  - change the copy-html scritp in the package.json
+
+  ```git
+  - "copy-html": "cp app/{index.html,manifest.json} ./public/",
+  + "copy-html": "cp app/{index.html,manifest.json,sw*.js} ./public/",
+  ```
+
+  - add the `register.js` file in `script/`
+  - add the `sw-v1.js` file in the root of our `app/`
+  - register the service worker in `register.js`
+
+  - import the `register.js` into the `index.js`
+
+  ```js
+  import "./register";
+  ```
+
+- go to caching app shell
+
+  [caching-app-shell][branch4]
+
 [home]: http://localhost:8080
 [home2]: http://127.0.0.1:8080
 [branch1]: https://github.com/jose4125/pwa/tree/1-add-manifest
 [branch2]: https://github.com/jose4125/pwa/tree/2-safari-explorer-support
 [branch3]: https://github.com/jose4125/pwa/tree/3-register-sw
+[branch4]: https://github.com/jose4125/pwa/tree/4-caching-app-shell

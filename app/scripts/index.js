@@ -1,4 +1,5 @@
 import template from "../template/news-template.html";
+import "./register";
 
 const data = {
   news: [
@@ -25,6 +26,5 @@ const data = {
   ]
 };
 const html = template(data);
-console.log("template", html);
 
 document.querySelector(".news-container").innerHTML = html;
