@@ -1,7 +1,7 @@
 self.addEventListener("install", event => {
   console.log("[service worker] installing the SW", event);
   event.waitUntil(
-    caches.open("static").then(cache => {
+    caches.open("static-v2").then(cache => {
       console.log("[service worker] caching app shell");
       cache.addAll([
         "/",
@@ -27,7 +27,14 @@ self.addEventListener("fetch", event => {
       if (response) {
         return response;
       } else {
-        return fetch(event.request);
+        return fetch(event.request)
+          .then(res => {
+            return caches.open("dynamic").then(cache => {
+              cache.put(event.request, res.clone());
+              return res;
+            });
+          })
+          .catch(err => {});
       }
     })
   );

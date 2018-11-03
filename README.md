@@ -107,6 +107,15 @@ $ npm start
 
   [dynamic-caching][branch5]
 
+  - add the `.then()` to our fetch request to handle the response
+  - add new `caches.open()` inside the `then()` function and name it `dynamic`
+  - save the `request` and the `response` in our cache storage
+  - return the `response` and the `caches.open()`
+
+- go to cleaning cache
+
+  [cleaning-cache][branch6]
+
 [home]: http://localhost:8080
 [home2]: http://127.0.0.1:8080
 [branch1]: https://github.com/jose4125/pwa/tree/1-add-manifest
@@ -114,3 +123,4 @@ $ npm start
 [branch3]: https://github.com/jose4125/pwa/tree/3-register-sw
 [branch4]: https://github.com/jose4125/pwa/tree/4-caching-app-shell
 [branch5]: https://github.com/jose4125/pwa/tree/5-dynamic-caching
+[branch6]: https://github.com/jose4125/pwa/tree/6-cleaning-cache
