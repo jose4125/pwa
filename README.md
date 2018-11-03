@@ -87,9 +87,30 @@ $ npm start
 
   [caching-app-shell][branch4]
 
+  - add the events listeners to cache the app shell
+
+  ```js
+  self.addEventListener("install", event => {
+    ...
+  }
+
+  self.addEventListener("activate", event => {
+    ...
+  }
+
+  self.addEventListener("fetch", event => {
+    ...
+  }
+  ```
+
+- go to dynamic caching
+
+  [dynamic-caching][branch5]
+
 [home]: http://localhost:8080
 [home2]: http://127.0.0.1:8080
 [branch1]: https://github.com/jose4125/pwa/tree/1-add-manifest
 [branch2]: https://github.com/jose4125/pwa/tree/2-safari-explorer-support
 [branch3]: https://github.com/jose4125/pwa/tree/3-register-sw
 [branch4]: https://github.com/jose4125/pwa/tree/4-caching-app-shell
+[branch5]: https://github.com/jose4125/pwa/tree/5-dynamic-caching

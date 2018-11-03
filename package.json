@@ -6,6 +6,7 @@
     "mustache-loader": "^1.4.1"
   },
   "devDependencies": {
+    "copy-webpack-plugin": "^4.5.4",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "husky": "^1.1.2",
@@ -18,7 +19,7 @@
     "clean": "rm -rf ./public && mkdir public",
     "copy-images": "cp -R app/images/ ./public/images",
     "copy-css": "cp -R app/css/ ./public/css",
-    "copy-html": "cp app/{index.html,manifest.json,sw*.js} ./public/",
+    "copy-html": "cp app/{index.html,manifest.json} ./public/ && cp -R app/help ./public",
     "copy": "npm run clean && npm run copy-html && npm run copy-css && npm run copy-images",
     "start": "http-server -c-1",
     "precommit": "pretty-quick --staged",
