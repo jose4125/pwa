@@ -116,6 +116,13 @@ $ npm start
 
   [cleaning-cache][branch6]
 
+  - inside the `activate` listener add `waitUntil` event
+  - get the `caches.keys()` to clean the cache storage
+
+* go to cache then network
+
+  [cache-then-network][branch7]
+
 [home]: http://localhost:8080
 [home2]: http://127.0.0.1:8080
 [branch1]: https://github.com/jose4125/pwa/tree/1-add-manifest
@@ -124,3 +131,4 @@ $ npm start
 [branch4]: https://github.com/jose4125/pwa/tree/4-caching-app-shell
 [branch5]: https://github.com/jose4125/pwa/tree/5-dynamic-caching
 [branch6]: https://github.com/jose4125/pwa/tree/6-cleaning-cache
+[branch7]: https://github.com/jose4125/pwa/tree/7-cache-then-network
