@@ -1,30 +1,47 @@
 import template from "../template/news-template.html";
 import "./register";
 
-const data = {
-  news: [
-    {
-      url: "google.com",
-      imageUrl:
-        "https://cdn.theatlantic.com/assets/media/img/mt/2018/08/iss050e066094_large/lead_720_405.jpg?mod=1535549776",
-      publishedAt: "today",
-      title: "space news",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ut venenatis leo. Donec nec quam a metus mattis ultrices. Vivamus consectetur magna vel erat ultrices porta. Suspendisse bibendum ultricies felis ut aliquam. Vivamus placerat tincidunt dui, nec vestibulum velit tincidunt vel. Integer luctus dictum velit, ac bibendum quam ullamcorper et.",
-      author: "glem"
-    },
-    {
-      url: "google.com",
-      imageUrl:
-        "https://cdn.theatlantic.com/assets/media/img/mt/2018/08/iss050e066094_large/lead_720_405.jpg?mod=1535549776",
-      publishedAt: "today",
-      title: "space news",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ut venenatis leo. Donec nec quam a metus mattis ultrices. Vivamus consectetur magna vel erat ultrices porta. Suspendisse bibendum ultricies felis ut aliquam. Vivamus placerat tincidunt dui, nec vestibulum velit tincidunt vel. Integer luctus dictum velit, ac bibendum quam ullamcorper et.",
-      author: "glem"
-    }
-  ]
-};
-const html = template(data);
+const url = "https://news-d62a0.firebaseio.com/news.json";
+let networkDataReceived = false;
 
-document.querySelector(".news-container").innerHTML = html;
+fetch(url)
+  .then(res => {
+    return res.json();
+  })
+  .then(data => {
+    networkDataReceived = true;
+    console.log("From web", data);
+    let fetchData = {
+      news: []
+    };
+
+    for (let item in data) {
+      fetchData.news.push(data[item]);
+    }
+    const html = template(fetchData);
+    document.querySelector(".news-container").innerHTML = html;
+  });
+
+if ("caches" in window) {
+  caches
+    .match(url)
+    .then(res => {
+      if (res) {
+        return res.json();
+      }
+    })
+    .then(data => {
+      console.log("From cache", data);
+      if (!networkDataReceived) {
+        let fetchData = {
+          news: []
+        };
+
+        for (let item in data) {
+          fetchData.news.push(data[item]);
+        }
+        const html = template(fetchData);
+        document.querySelector(".news-container").innerHTML = html;
+      }
+    });
+}
