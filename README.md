@@ -119,9 +119,22 @@ $ npm start
   - inside the `activate` listener add `waitUntil` event
   - get the `caches.keys()` to clean the cache storage
 
-* go to cache then network
+- go to cache then network
 
   [cache-then-network][branch7]
+
+  ```sh
+    git checkout -t origin/7-cache-then-network
+  ```
+
+  - add `offline.html` file in the root of our `app`,
+  - `index.js` add cache then network
+  - `sw` add the cache then network yo get the updated data
+  - `sw` get the data from the cache storage, if it not exist fetch it, and add the data to the cache storage
+
+- go to indexedDB dynamic data
+
+  [indexedDB-dynamic-data][branch8]
 
 [home]: http://localhost:8080
 [home2]: http://127.0.0.1:8080
@@ -132,3 +145,4 @@ $ npm start
 [branch5]: https://github.com/jose4125/pwa/tree/5-dynamic-caching
 [branch6]: https://github.com/jose4125/pwa/tree/6-cleaning-cache
 [branch7]: https://github.com/jose4125/pwa/tree/7-cache-then-network
+[branch8]: https://github.com/jose4125/pwa/tree/8-indexedDB-dynamic-data

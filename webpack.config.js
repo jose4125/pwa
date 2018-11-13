@@ -17,7 +17,11 @@ const config = {
   module: {
     rules: [mustache]
   },
-  plugins: [new CopyWebpackPlugin([{ from: "sw-*.js", to: "../" }])]
+  plugins: [
+    new CopyWebpackPlugin([
+      { from: "**/*", to: "../", ignore: ["scripts/**/*", "template/**/*"] }
+    ])
+  ]
 };
 
 module.exports = config;
