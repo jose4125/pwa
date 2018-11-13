@@ -1,4 +1,4 @@
-const CACHE_STATIC_NAME = "static-v2";
+const CACHE_STATIC_NAME = "static-v3";
 const CACHE_DYNAMIC_NAME = "dynamic";
 
 self.addEventListener("install", event => {
@@ -9,6 +9,7 @@ self.addEventListener("install", event => {
       cache.addAll([
         "/",
         "/index.html",
+        "/offline.html",
         "/scripts/index.js",
         "/css/index.css",
         "/images/logo.svg",
@@ -37,20 +38,41 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      if (response) {
-        return response;
-      } else {
-        return fetch(event.request)
-          .then(res => {
-            return caches.open(CACHE_DYNAMIC_NAME).then(cache => {
-              cache.put(event.request, res.clone());
-              return res;
+  const url = "https://news-d62a0.firebaseio.com/news.json";
+
+  // cache then network
+  if (event.request.url.indexOf(url) > -1) {
+    event.respondWith(
+      caches.open(CACHE_DYNAMIC_NAME).then(cache => {
+        return fetch(event.request).then(res => {
+          cache.put(event.request, res.clone());
+          return res;
+        });
+      })
+    );
+  } else {
+    // cache with network fallback - cache falling back to the network
+    event.respondWith(
+      caches.match(event.request).then(response => {
+        if (response) {
+          return response;
+        } else {
+          return fetch(event.request)
+            .then(res => {
+              return caches.open(CACHE_DYNAMIC_NAME).then(cache => {
+                cache.put(event.request, res.clone());
+                return res;
+              });
+            })
+            .catch(err => {
+              return caches.open(CACHE_STATIC_NAME).then(cache => {
+                if (event.request.headers.get("accept").includes("text/html")) {
+                  return cache.match("/offline.html");
+                }
+              });
             });
-          })
-          .catch(err => {});
-      }
-    })
-  );
+        }
+      })
+    );
+  }
 });
