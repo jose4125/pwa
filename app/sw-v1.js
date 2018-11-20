@@ -1,4 +1,7 @@
-const CACHE_STATIC_NAME = "static-v3";
+importScripts("./vendor/idb.js");
+importScripts("./utils/idb-database.js");
+
+const CACHE_STATIC_NAME = "static-v4";
 const CACHE_DYNAMIC_NAME = "dynamic";
 
 self.addEventListener("install", event => {
@@ -11,6 +14,7 @@ self.addEventListener("install", event => {
         "/index.html",
         "/offline.html",
         "/scripts/index.js",
+        "/vendor/idb.js",
         "/css/index.css",
         "/images/logo.svg",
         "/images/noimage.jpg",
@@ -38,16 +42,25 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
-  const url = "https://news-d62a0.firebaseio.com/news.json";
+  const url = "https://news-pwa-86d39.firebaseio.com/news.json";
 
   // cache then network
   if (event.request.url.indexOf(url) > -1) {
     event.respondWith(
-      caches.open(CACHE_DYNAMIC_NAME).then(cache => {
-        return fetch(event.request).then(res => {
-          cache.put(event.request, res.clone());
-          return res;
-        });
+      fetch(event.request).then(res => {
+        const resClone = res.clone();
+        database
+          .clearAllData("news")
+          .then(() => {
+            return resClone.json();
+          })
+          .then(data => {
+            for (let key in data) {
+              database.saveData("news", data[key]);
+            }
+          });
+
+        return res;
       })
     );
   } else {

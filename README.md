@@ -136,6 +136,20 @@ $ npm start
 
   [indexedDB-dynamic-data][branch8]
 
+  - add the indexedDB promises library `vendors/idb.js` inside vendors folder
+  - add idb helpers methods `utils/idb-database.js` inside the utils folder
+  - add idb library script in the `index.html`
+
+  ```html
+  <script src="/vendor/idb.js"></script>
+  ```
+
+  - change in `sw-v1.js` and `index.js`, every `json` data that was cached when the request is completed
+
+- go to background sync
+
+  [background-sync][branch9]
+
 [home]: http://localhost:8080
 [home2]: http://127.0.0.1:8080
 [branch1]: https://github.com/jose4125/pwa/tree/1-add-manifest
@@ -146,3 +160,4 @@ $ npm start
 [branch6]: https://github.com/jose4125/pwa/tree/6-cleaning-cache
 [branch7]: https://github.com/jose4125/pwa/tree/7-cache-then-network
 [branch8]: https://github.com/jose4125/pwa/tree/8-indexedDB-dynamic-data
+[branch9]: https://github.com/jose4125/pwa/tree/9-background-sync
