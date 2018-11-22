@@ -8,9 +8,12 @@ const mustache = {
 
 const config = {
   context: path.join(__dirname, "app"),
-  entry: "./scripts/index.js",
+  entry: {
+    index: "./scripts/index.js",
+    "new-post": "./scripts/new-post.js"
+  },
   output: {
-    filename: "index.js",
+    filename: "[name].js",
     publicPath: "/",
     path: path.resolve(__dirname, "public/scripts")
   },
