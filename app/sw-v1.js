@@ -1,19 +1,24 @@
 importScripts("./vendor/idb.js");
 importScripts("./utils/idb-database.js");
 
-const CACHE_STATIC_NAME = "static-v4";
+const CACHE_STATIC_NAME = "static-v5";
 const CACHE_DYNAMIC_NAME = "dynamic";
+const url = "https://news-d62a0.firebaseio.com/news.json";
+const postUrl =
+  "https://us-central1-news-d62a0.cloudfunctions.net/storePostData";
 
 self.addEventListener("install", event => {
-  console.log("[service worker] installing the SW", event);
+  console.log("[📟 - service worker] installing the SW 🔌", event);
   event.waitUntil(
     caches.open(CACHE_STATIC_NAME).then(cache => {
-      console.log("[service worker] caching app shell");
+      console.log("[📟 - service worker] caching app shell 🗂️");
       cache.addAll([
         "/",
         "/index.html",
         "/offline.html",
+        "/new-post.html",
         "/scripts/index.js",
+        "/scripts/new-post.js",
         "/vendor/idb.js",
         "/css/index.css",
         "/images/logo.svg",
@@ -25,13 +30,13 @@ self.addEventListener("install", event => {
 });
 
 self.addEventListener("activate", event => {
-  console.log("[service worker] activating SW", event);
+  console.log("[📟 - service worker] activating SW 💡", event);
   event.waitUntil(
     caches.keys().then(keyList => {
       return Promise.all(
         keyList.map(key => {
           if (key !== CACHE_STATIC_NAME && key !== CACHE_DYNAMIC_NAME) {
-            console.log("[service worker] removing old cache", key);
+            console.log("[📟 - service worker] removing old cache 🗑️", key);
             return caches.delete(key);
           }
         })
@@ -42,8 +47,6 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
-  const url = "https://news-d62a0.firebaseio.com/news.json";
-
   // cache then network
   if (event.request.url.indexOf(url) > -1) {
     event.respondWith(
@@ -83,6 +86,48 @@ self.addEventListener("fetch", event => {
                   return cache.match("/offline.html");
                 }
               });
+            });
+        }
+      })
+    );
+  }
+});
+
+self.addEventListener("sync", event => {
+  console.log("[📟 - service worker] background sync 📳", event);
+  if (event.tag === "sync-new-posts") {
+    console.log("[📟 - service worker] syncing new post ⚡️");
+    event.waitUntil(
+      database.getAllData("sync-posts").then(data => {
+        for (let post of data) {
+          fetch(postUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json"
+            },
+            body: JSON.stringify({
+              id: post.id,
+              publishedAt: post.publishedAt,
+              title: post.title,
+              body: post.body,
+              author: post.author,
+              url: post.url,
+              imageUrl: post.imageUrl
+            })
+          })
+            .then(res => {
+              console.info("📟 - sent data 📬 🛎️", res);
+              if (res.ok) {
+                return res.json();
+              }
+            })
+            .then(data => {
+              console.info("📟 - remove data 📭");
+              database.deleteItemData("sync-posts", data.id);
+            })
+            .catch(err => {
+              console.log("📟 - error while sending posts 🚨 ", err);
             });
         }
       })
