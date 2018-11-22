@@ -3,6 +3,10 @@
     if (!db.objectStoreNames.contains("news")) {
       db.createObjectStore("news", { keyPath: "id" });
     }
+
+    if (!db.objectStoreNames.contains("sync-new-posts")) {
+      db.createObjectStore("sync-posts", { keyPath: "id" });
+    }
   });
 
   let database = {

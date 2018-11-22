@@ -2,7 +2,7 @@ import template from "../template/news-template.html";
 import "./register";
 import database from "../utils/idb-database";
 
-const url = "https://news-d62a0.firebaseio.com/news.json";
+const url = "https://news-pwa-86d39.firebaseio.com/news.json";
 let networkDataReceived = false;
 
 fetch(url)
@@ -11,7 +11,7 @@ fetch(url)
   })
   .then(data => {
     networkDataReceived = true;
-    console.log("From web", data);
+    console.log("From web 🌎", data);
     let fetchData = {
       news: []
     };
@@ -26,7 +26,7 @@ fetch(url)
 if ("indexedDB" in window) {
   database.getAllData("news").then(data => {
     if (!networkDataReceived) {
-      console.log("from cache", data);
+      console.log("from cache 🗄️", data);
       let cacheData = {
         news: data
       };

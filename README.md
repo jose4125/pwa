@@ -150,6 +150,54 @@ $ npm start
 
   [background-sync][branch9]
 
+  - install the dependencies
+
+  ```sh
+  $ npm install
+  ```
+
+  - add `new-post.html` in the root of our `app/`
+  - add `new-post.js` in `app/scripts/`
+  - add new post link in `index.html`
+
+  ```html
+  <a href="/new-post"> + new post</a>
+  ```
+
+  - get the form values
+  - add `submit` event listener
+  - check if `serviceWorker` and `SyncManager` is supported
+
+  ```js
+  if ('serviceWorker' in navigator && 'SyncManager' in window){...}
+  ```
+
+  - register the sync event
+
+  ```js
+  sw.sync.register("sync-new-posts");
+  ```
+
+  - send form data by `POST` request if `serviceWorker` and `SyncManager` is not supported
+  - create the indexedDB object store called `sync-posts`
+
+  ```js
+  db.createObjectStore("sync-posts", { keyPath: "id" });
+  ```
+
+  - add the `sync` event listener in `sw-v1.js`
+
+  ```js
+  self.addEventListener('sync', event => {...}
+  ```
+
+  - get all the indexedDB data stored in `sync-posts`
+  - for each one item in the store send a `POST` request
+
+- go to web push notification
+
+  [web-push-notification][branch10]
+
 [home]: http://localhost:8080
 [home2]: http://127.0.0.1:8080
 [branch1]: https://github.com/jose4125/pwa/tree/1-add-manifest
@@ -161,3 +209,4 @@ $ npm start
 [branch7]: https://github.com/jose4125/pwa/tree/7-cache-then-network
 [branch8]: https://github.com/jose4125/pwa/tree/8-indexedDB-dynamic-data
 [branch9]: https://github.com/jose4125/pwa/tree/9-background-sync
+[branch10]: https://github.com/jose4125/pwa/tree/10-web-push-notification
