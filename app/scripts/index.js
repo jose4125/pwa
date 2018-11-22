@@ -11,7 +11,7 @@ fetch(url)
   })
   .then(data => {
     networkDataReceived = true;
-    console.log("From web", data);
+    console.log("From web 🌎", data);
     let fetchData = {
       news: []
     };
@@ -26,7 +26,7 @@ fetch(url)
 if ("indexedDB" in window) {
   database.getAllData("news").then(data => {
     if (!networkDataReceived) {
-      console.log("from cache", data);
+      console.log("from cache 🗄️", data);
       let cacheData = {
         news: data
       };
