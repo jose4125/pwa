@@ -198,6 +198,32 @@ $ npm start
 
   [web-push-notification][branch10]
 
+  - enable the browser notification
+  - handle the browser notification with service worker
+  - add the `notificationclick` event to handle the notification actions
+
+  ```js
+  self.addEventListener("notificationclick", event => {...}
+  ```
+
+  - add the `notificationclose` event to handle when the notification was closed
+
+  ```js
+  self.addEventListener("notificationclose", event => {...}
+  ```
+
+  - connect with push messages
+  - generate subscription data and send it to the push notification service
+  - add the `push` event to handle the push
+
+  ```js
+  self.addEventListener('push', event => {...}
+  ```
+
+- go to push notification one signal
+
+  [push-notification-one-signal][branch11]
+
 [home]: http://localhost:8080
 [home2]: http://127.0.0.1:8080
 [branch1]: https://github.com/jose4125/pwa/tree/1-add-manifest
@@ -210,3 +236,4 @@ $ npm start
 [branch8]: https://github.com/jose4125/pwa/tree/8-indexedDB-dynamic-data
 [branch9]: https://github.com/jose4125/pwa/tree/9-background-sync
 [branch10]: https://github.com/jose4125/pwa/tree/10-web-push-notification
+[branch11]: https://github.com/jose4125/pwa/tree/11-push-notification-one-signal

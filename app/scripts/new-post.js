@@ -2,12 +2,12 @@ import "./register";
 import database from "../utils/idb-database";
 
 const postUrl =
-  "https://us-central1-news-d62a0.cloudfunctions.net/storePostData";
+  "https://us-central1-news-pwa-86d39.cloudfunctions.net/storePostData";
 const form = document.querySelector(".new-post");
 const title = document.querySelector("#title");
 const body = document.querySelector("#description");
 const author = document.querySelector("#author");
-const url = document.querySelector("#url");
+const newsUrl = document.querySelector("#url");
 
 function sendData() {
   fetch(postUrl, {
@@ -22,7 +22,7 @@ function sendData() {
       title: title.value,
       body: body.value,
       author: author.value,
-      url: url.value,
+      url: newsUrl.value,
       imageUrl:
         "https://papeersupportcoalition.org/wp-content/uploads/2017/01/6a00d83420c49153ef01b7c781a9b2970b.jpg"
     })
@@ -52,7 +52,7 @@ form.addEventListener("submit", event => {
           title: title.value,
           body: body.value,
           author: author.value,
-          url: url.value,
+          url: newsUrl.value,
           imageUrl:
             "https://papeersupportcoalition.org/wp-content/uploads/2017/01/6a00d83420c49153ef01b7c781a9b2970b.jpg"
         };
