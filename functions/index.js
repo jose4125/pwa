@@ -2,6 +2,8 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const cors = require("cors")({ origin: true });
 const webPush = require("web-push");
+const formidable = require("formidable");
+const fs = require("fs");
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
@@ -12,11 +14,31 @@ const vapidKey = "lmmKhmamYZ9BPB7-PyddWauEbDkjlRPg6QL7PzdTEUM";
 const vapidPublicKey =
   "BKIKQ6gtDQrKUvbpWYr8QiOHfAkmdFHew9Fom0Pam8NSoCu0IunyBfwBJfNiC2D61ER81Zu5HhNYsvVF54nqVuA";
 
+const googleCloudConfig = {
+  projectId: "news-pwa-86d39",
+  keyFilename: functions.config().firebase
+};
+
+const googleCloudStorage = require("@google-cloud/storage")(googleCloudConfig);
+
 admin.initializeApp(functions.config().firebase);
 
 exports.storePostData = functions.https.onRequest((req, res) => {
   let { id, title, body, publishedAt, author, url, imageUrl } = req.body;
   cors(req, res, () => {
+    let formData = new formidable.IncomingForm();
+    formData.parse(req, (err, fields, files) => {
+      fs.rename(files.file.path, "/tmp/" + files.file.name);
+      const bucket = googleCloudStorage.bucket("news-pwa-86d39.appspot.com");
+      bucket.upload("/tmp/" + files.file.name, {
+        uploadType: "media",
+        metadata: {
+          metadata: {
+            contentType: files.file.type
+          }
+        }
+      });
+    });
     admin
       .database()
       .ref("news")
