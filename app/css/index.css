@@ -101,3 +101,15 @@ h3 {
 .link-detail:hover {
   transform: translateX(-10px);
 }
+
+.camera-photo,
+.canvas-photo {
+  width: 512px;
+  max-width: 100%;
+  display: none;
+  margin: auto;
+}
+
+.pick-image {
+  display: none;
+}

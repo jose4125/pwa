@@ -85,13 +85,15 @@
     <hr>
     <button class="subscribe">Subscribe to sync notifications</button>
     <hr>
+    <video class="camera-photo" autoplay></video>
+    <canvas class="canvas-photo" id="canvas" width="320px" height="240px"></canvas>
+    <button class="photo-button">Capture</button>
+    <div class="pick-image">
+      <h6>Pick an image</h6>
+      <input type="file" accept="image/*" name="image" class="image-picker">
+    </div>
     <div class="news-container">
       <form class="new-post">
-        <p>
-          <label for="imageUrl">Image:</label>
-          <hr>
-          <input type="file" name="imageUrl" id="imageUrl">
-        </p>
         <p>
           <label for="title">Title:</label>
           <hr>

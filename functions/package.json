@@ -10,9 +10,12 @@
     "web-push": "web-push"
   },
   "dependencies": {
+    "@google-cloud/storage": "^2.3.1",
+    "busboy": "^0.2.14",
     "cors": "^2.8.5",
     "firebase-admin": "^6.0.0",
     "firebase-functions": "^2.1.0",
+    "uuid-v4": "^0.1.0",
     "web-push": "^3.3.3"
   },
   "private": true

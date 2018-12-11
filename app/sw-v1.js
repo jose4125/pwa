@@ -1,7 +1,7 @@
 importScripts("./vendor/idb.js");
 importScripts("./utils/idb-database.js");
 
-const CACHE_STATIC_NAME = "static-v5";
+const CACHE_STATIC_NAME = "static-v6";
 const CACHE_DYNAMIC_NAME = "dynamic";
 const url = "https://news-pwa-86d39.firebaseio.com/news.json";
 const postUrl =
@@ -100,21 +100,18 @@ self.addEventListener("sync", event => {
     event.waitUntil(
       database.getAllData("sync-posts").then(data => {
         for (let post of data) {
+          let postData = new FormData();
+          postData.append("id", post.id);
+          postData.append("publishedAt", post.publishedAt);
+          postData.append("title", post.title);
+          postData.append("body", post.body);
+          postData.append("author", post.author);
+          postData.append("url", post.url);
+          postData.append("file", post.imageUrl, `${post.id}.png`);
+
           fetch(postUrl, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json"
-            },
-            body: JSON.stringify({
-              id: post.id,
-              publishedAt: post.publishedAt,
-              title: post.title,
-              body: post.body,
-              author: post.author,
-              url: post.url,
-              imageUrl: post.imageUrl
-            })
+            body: postData
           })
             .then(res => {
               console.info("📟 - sent data 📬 🛎️", res);
