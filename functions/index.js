@@ -1,9 +1,13 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const { Storage } = require("@google-cloud/storage");
 const cors = require("cors")({ origin: true });
 const webPush = require("web-push");
-const formidable = require("formidable");
 const fs = require("fs");
+const os = require("os");
+const Busboy = require("busboy");
+const path = require("path");
+var UUID = require("uuid-v4");
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
@@ -19,71 +23,123 @@ const googleCloudConfig = {
   keyFilename: functions.config().firebase
 };
 
-const googleCloudStorage = require("@google-cloud/storage")(googleCloudConfig);
-
 admin.initializeApp(functions.config().firebase);
 
-exports.storePostData = functions.https.onRequest((req, res) => {
-  let { id, title, body, publishedAt, author, url, imageUrl } = req.body;
-  cors(req, res, () => {
-    let formData = new formidable.IncomingForm();
-    formData.parse(req, (err, fields, files) => {
-      fs.rename(files.file.path, "/tmp/" + files.file.name);
-      const bucket = googleCloudStorage.bucket("news-pwa-86d39.appspot.com");
-      bucket.upload("/tmp/" + files.file.name, {
-        uploadType: "media",
-        metadata: {
-          metadata: {
-            contentType: files.file.type
+const googleCloudStorage = new Storage(googleCloudConfig);
+
+function storeData(fields, res, uuid, uploadedFile, bucket) {
+  admin
+    .database()
+    .ref("news")
+    .push({
+      id: fields.id,
+      title: fields.title,
+      body: fields.body,
+      publishedAt: fields.publishedAt,
+      author: fields.author,
+      url: fields.url,
+      imageUrl: bucket
+        ? `https://firebasestorage.googleapis.com/v0/b/${
+            bucket.name
+          }/o/${encodeURIComponent(uploadedFile.name)}?alt=media&token=${uuid}`
+        : "http://msigrupo.com/wp-content/uploads/2015/09/news-msi.jpg"
+    })
+    .then(function() {
+      console.log("SAVED ============");
+      webPush.setVapidDetails(mailTo, vapidPublicKey, vapidKey);
+      return admin
+        .database()
+        .ref("subscriptions")
+        .once("value");
+    })
+    .then(function(subscriptions) {
+      console.log("subscriptions ============");
+      subscriptions.forEach(function(sub) {
+        var pushConfig = {
+          endpoint: sub.val().endpoint,
+          keys: {
+            auth: sub.val().keys.auth,
+            p256dh: sub.val().keys.p256dh
           }
-        }
+        };
+
+        webPush
+          .sendNotification(
+            pushConfig,
+            JSON.stringify({
+              title: `New post added by ${author}!`,
+              content: title,
+              openUrl: url
+            })
+          )
+          .catch(function(err) {
+            console.error("error while sending notification 🚨", err);
+          });
       });
+      console.log("SUCCESS ============");
+      res.status(201).json({ message: "Data stored", id: fields.id });
+    })
+    .catch(function(err) {
+      console.log("ERROR ============");
+      res.status(500).json({ error: err });
     });
-    admin
-      .database()
-      .ref("news")
-      .push({
-        id,
-        title,
-        body,
-        publishedAt,
-        author,
-        url,
-        imageUrl
-      })
-      .then(() => {
-        webPush.setVapidDetails(mailTo, vapidPublicKey, vapidKey);
-        return admin
-          .database()
-          .ref("subscriptions")
-          .once("value");
-      })
-      .then(subscriptions => {
-        subscriptions.forEach(subscription => {
-          let pushConfig = {
-            endpoint: subscription.val().endpoint,
-            keys: {
-              auth: subscription.val().keys.auth,
-              p256dh: subscription.val().keys.p256dh
+}
+
+exports.storePostData = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {
+    const uuid = UUID();
+
+    const busboy = new Busboy({ headers: req.headers });
+
+    let upload;
+    const fields = {};
+
+    busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
+      console.log(
+        `File [${fieldname}] filename: ${filename}, encoding: ${encoding}, mimetype: ${mimetype}`
+      );
+      const filepath = path.join(os.tmpdir(), filename);
+      upload = { file: filepath, type: mimetype };
+      file.pipe(fs.createWriteStream(filepath));
+    });
+
+    busboy.on("field", function(
+      fieldname,
+      val,
+      fieldnameTruncated,
+      valTruncated,
+      encoding,
+      mimetype
+    ) {
+      fields[fieldname] = val;
+    });
+
+    busboy.on("finish", () => {
+      var bucket = googleCloudStorage.bucket("news-pwa-86d39.appspot.com");
+      if (upload && upload.file) {
+        bucket.upload(
+          upload.file,
+          {
+            uploadType: "media",
+            metadata: {
+              metadata: {
+                contentType: upload.type,
+                firebaseStorageDownloadTokens: uuid
+              }
             }
-          };
-          webPush
-            .sendNotification(
-              pushConfig,
-              JSON.stringify({
-                title: `New post added by ${author}!`,
-                content: title,
-                openUrl: url
-              })
-            )
-            .catch(err => {
-              console.error("error while sending notification 🚨", err);
-            });
-        });
-        res.status(201).json({ message: "data stored", id: req.body.id });
-      })
-      .catch(err => {
-        res.status(500).json({ error: err });
-      });
+          },
+          function(err, uploadedFile) {
+            if (!err) {
+              storeData(fields, res, uuid, uploadedFile, bucket);
+            } else {
+              console.log(err);
+            }
+          }
+        );
+      } else {
+        storeData(fields, res);
+      }
+    });
+    busboy.end(req.rawBody);
   });
 });

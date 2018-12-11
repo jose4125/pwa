@@ -107,7 +107,7 @@ self.addEventListener("sync", event => {
           postData.append("body", post.body);
           postData.append("author", post.author);
           postData.append("url", post.url);
-          postData.append("file", post.picture, post.id + ".png");
+          postData.append("file", post.imageUrl, `${post.id}.png`);
 
           fetch(postUrl, {
             method: "POST",

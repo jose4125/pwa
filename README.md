@@ -224,6 +224,26 @@ $ npm start
 
   [push-notification-one-signal][branch11]
 
+  - add video, canvas, button to capture the photo, and a label and input to upload an image as a fallback in `new-post.html`
+  - get the elements previously added and save them in variables in `new-post.js`
+  - add an `initializeMedia()` function to get the camera and add a polyfill to support old browsers
+  - add a click listener to capture the photo
+
+  ```js
+  captureButton.addEventListener("click", function(event) {...}
+  ```
+
+  - change the way we are sending data from json to formdata in `new-post.js` and `sw-v1.js`
+  - add a change listener to upload an image
+
+  ```js
+  imagePicker.addEventListener("change", event => {...}
+  ```
+
+- go to native device features xxx
+
+  [native-device-features-xxx][branch11]
+
 [home]: http://localhost:8080
 [home2]: http://127.0.0.1:8080
 [branch1]: https://github.com/jose4125/pwa/tree/1-add-manifest
@@ -237,3 +257,4 @@ $ npm start
 [branch9]: https://github.com/jose4125/pwa/tree/9-background-sync
 [branch10]: https://github.com/jose4125/pwa/tree/10-web-push-notification
 [branch11]: https://github.com/jose4125/pwa/tree/11-push-notification-one-signal
+[branch13]: https://github.com/jose4125/pwa/tree/13-native-device-features-xxx

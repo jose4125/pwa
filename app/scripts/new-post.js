@@ -13,6 +13,7 @@ const videoPlayer = document.querySelector(".camera-photo");
 const canvasElement = document.querySelector(".canvas-photo");
 const captureButton = document.querySelector(".photo-button");
 const imagePickerArea = document.querySelector(".pick-image");
+const imagePicker = document.querySelector(".image-picker");
 
 let picture;
 
@@ -65,7 +66,12 @@ captureButton.addEventListener("click", function(event) {
   picture = dataURItoBlob(canvasElement.toDataURL());
 });
 
+imagePicker.addEventListener("change", event => {
+  picture = event.target.files[0];
+});
+
 function sendData() {
+  console.log("picture", picture);
   const id = new Date.toISOString();
   let postData = new FormData();
   postData.append("id", id);
@@ -74,7 +80,9 @@ function sendData() {
   postData.append("body", body.value);
   postData.append("author", author.value);
   postData.append("url", newsUrl.value);
-  postData.append("file", picture, id + ".png");
+  postData.append("file", picture, `${id}.png`);
+
+  console.log("postData", postData);
 
   fetch(postUrl, {
     method: "POST",
