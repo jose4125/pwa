@@ -54,28 +54,30 @@ function storeData(fields, res, uuid, uploadedFile, bucket) {
     })
     .then(function(subscriptions) {
       console.log("subscriptions ============");
-      subscriptions.forEach(function(sub) {
-        var pushConfig = {
-          endpoint: sub.val().endpoint,
-          keys: {
-            auth: sub.val().keys.auth,
-            p256dh: sub.val().keys.p256dh
-          }
-        };
+      if (subscriptions.length) {
+        subscriptions.forEach(function(sub) {
+          var pushConfig = {
+            endpoint: sub.val().endpoint,
+            keys: {
+              auth: sub.val().keys.auth,
+              p256dh: sub.val().keys.p256dh
+            }
+          };
 
-        webPush
-          .sendNotification(
-            pushConfig,
-            JSON.stringify({
-              title: `New post added by ${author}!`,
-              content: title,
-              openUrl: url
-            })
-          )
-          .catch(function(err) {
-            console.error("error while sending notification 🚨", err);
-          });
-      });
+          webPush
+            .sendNotification(
+              pushConfig,
+              JSON.stringify({
+                title: `New post added by ${author}!`,
+                content: title,
+                openUrl: url
+              })
+            )
+            .catch(function(err) {
+              console.error("error while sending notification 🚨", err);
+            });
+        });
+      }
       console.log("SUCCESS ============");
       res.status(201).json({ message: "Data stored", id: fields.id });
     })
