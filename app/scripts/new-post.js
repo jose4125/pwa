@@ -72,15 +72,15 @@ imagePicker.addEventListener("change", event => {
 
 function sendData() {
   console.log("picture", picture);
-  const id = new Date.toISOString();
+  const date = new Date().toISOString();
   let postData = new FormData();
-  postData.append("id", id);
-  postData.append("publishedAt", Date().toISOString());
+  postData.append("id", date);
+  postData.append("publishedAt", date);
   postData.append("title", title.value);
   postData.append("body", body.value);
   postData.append("author", author.value);
   postData.append("url", newsUrl.value);
-  postData.append("file", picture, `${id}.png`);
+  postData.append("file", picture, `${date}.png`);
 
   console.log("postData", postData);
 

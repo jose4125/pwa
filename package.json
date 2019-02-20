@@ -13,14 +13,17 @@
     "prettier": "1.14.3",
     "pretty-quick": "^1.8.0",
     "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.2"
+    "webpack-cli": "^3.1.2",
+    "workbox-cli": "^3.6.3"
   },
   "scripts": {
     "clean": "rm -rf ./public && mkdir public",
     "start": "http-server -c-1",
     "precommit": "pretty-quick --staged",
     "develop": "npm run clean && webpack --watch --mode development",
-    "build": "npm run copy && webpack --mode production"
+    "build": "npm run copy && webpack --mode production",
+    "wizard-sw": "workbox wizard",
+    "generate-sw": "workbox injectManifest workbox-config.js"
   },
   "repository": {
     "type": "git",
