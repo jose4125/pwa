@@ -116,7 +116,7 @@ self.addEventListener("sync", event => {
             .then(res => {
               console.info("📟 - sent data 📬 🛎️", res);
               if (res.ok) {
-                return res.json();
+                return res.clone().json();
               }
             })
             .then(data => {

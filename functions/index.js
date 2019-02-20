@@ -53,7 +53,7 @@ function storeData(fields, res, uuid, uploadedFile, bucket) {
         .once("value");
     })
     .then(function(subscriptions) {
-      console.log("subscriptions ============");
+      console.log("subscriptions ============", subscriptions);
       subscriptions.forEach(function(sub) {
         var pushConfig = {
           endpoint: sub.val().endpoint,
@@ -63,13 +63,16 @@ function storeData(fields, res, uuid, uploadedFile, bucket) {
           }
         };
 
+        console.log("title", fields.title);
+        console.log("author", fields.author);
+
         webPush
           .sendNotification(
             pushConfig,
             JSON.stringify({
-              title: `New post added by ${author}!`,
-              content: title,
-              openUrl: url
+              title: `New post added by ${fields.author}!`,
+              content: fields.title,
+              openUrl: fields.url
             })
           )
           .catch(function(err) {
@@ -80,7 +83,7 @@ function storeData(fields, res, uuid, uploadedFile, bucket) {
       res.status(201).json({ message: "Data stored", id: fields.id });
     })
     .catch(function(err) {
-      console.log("ERROR ============");
+      console.log("ERROR ============", err);
       res.status(500).json({ error: err });
     });
 }
